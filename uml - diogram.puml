@@ -22,7 +22,7 @@ Master --> UC_Viewing_list_application
 Master --> UC_Find_application
 Master --> UC_Viewing_application
 Master --> US_closing_application
-UC_Find_application --> US_Name
+UC_Find_application --> US_Name:<<include>>
 
 Client --> US_Registr
 US_Registr --> US_Enter_sistem
