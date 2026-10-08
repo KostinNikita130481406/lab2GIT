@@ -29,4 +29,4 @@ def init_db():
                             REFERENCES Personal (Kod_Personal), 
                         
                         FOREIGN KEY (Kod_client)
-                            REFERENCES Client (Kod_client))''')     
+                            REFERENCES Client (Kod_client))''')
