@@ -1,5 +1,5 @@
 import sqlite3
-from random import choice
+
 
 
 def get_connection(): # Получение конекшина к БД
@@ -36,7 +36,7 @@ def init_db():
     db.close()
 
 
-def incert_client(FULL_NAME):
+def incert_client(FULL_NAME):# функция добавления клиента
     db = get_connection()
     cursor = db.cursor()
     cursor.execute('''INSERT INTO Client (Full_Name)
@@ -44,7 +44,7 @@ def incert_client(FULL_NAME):
     db.commit()
     db.close()
 
-def Show_client():
+def Show_client():# вывод всех клиентов
     db = get_connection()
     cursor = db.cursor()
     cursor.execute('''SELECT * FROM Client''')
@@ -120,8 +120,7 @@ while (True):
         case 4:
             print("Программа закрыта ")
             break
-        case _:
-            print("eerefe")
+
 
 
 

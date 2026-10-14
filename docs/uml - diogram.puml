@@ -12,21 +12,27 @@ package "Система" {
     usecase "Просмотр заявки" as UC_Viewing_application
     usecase "Закрыть заявку" as US_closing_application
     usecase "По ФИО" as US_Name
+    usecase "Вход в систему" as input_System
+
 
     usecase "Регистрация пользователя" as US_Registr
     usecase "Вход в систему" as US_Enter_sistem
     usecase "создание новой заявки" as US_newzayavka
     usecase "Добавить нового пользователя" as US_New_client
 }
-Master -- UC_Viewing_list_application
-Master -- UC_Find_application
-Master -- UC_Viewing_application
-Master -- US_closing_application
-UC_Find_application --> US_Name:<<include>>
+input_System -- UC_Viewing_list_application
+input_System -- UC_Find_application
+input_System -- UC_Viewing_application
+input_System -- US_closing_application
+UC_Find_application .. US_Name:<<include>>
+Master -- input_System
+
+
+
+
 
 Client -- US_Registr
-US_Registr -- US_Enter_sistem
 Client -- US_Enter_sistem
-Client -- US_newzayavka
+US_Enter_sistem -- US_newzayavka
 Admin -- US_New_client
 @end
