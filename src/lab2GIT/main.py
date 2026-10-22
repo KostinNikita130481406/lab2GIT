@@ -8,12 +8,20 @@ while (True):
     choicee = int(input("Выберете вариант меню "))
     match choicee:
         case 1 :
-            FULL_NAME = input("Введите ФИО клиента ")
-            data_base.incert_client(FULL_NAME)
+            name = input("Введите имя клиента ")
+            surname = input("Введите фамилию клиента ")
+            patronymic = input("Введите отчество клиента ")
+            login = input("Введите свой логин ")
+            password = input("Введите свой пароль  ")
+            data_base.incert_client(name, surname, patronymic, login, password)
             data_base.Show_client()
         case 2:
-            FULL_NAME = input("Введите ФИО сотрудника ")
-            data_base.incert_personal(FULL_NAME)
+            name = input("Введите имя сотрудника ")
+            surname = input("Введите фамилию сотрудника ")
+            patronymic = input("Введите отчество сотрудника ")
+            login = input("Введите свой логин ")
+            password = input("Введите свой пароль  ")
+            data_base.incert_client(name, surname, patronymic, login, password)
             data_base.Show_personal()
         case 3:
             Data_income = input("Введите дату поступления заявки ")

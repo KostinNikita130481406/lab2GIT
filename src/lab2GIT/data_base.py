@@ -64,11 +64,12 @@ def init_db():
     db.close()
 
 
-def incert_client(FULL_NAME):  # функция добавления клиента
+def incert_client(name, surname, patronymic, login, password):  # функция добавления клиента
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute('''INSERT INTO Client (Full_Name)
-                    VALUES (?) ''', (FULL_NAME,))
+    cursor.execute('''INSERT INTO Client (Name, Surname, Patronymic, Login, Password)
+                          VALUES (?, ?, ?, ?, ?)''',
+                   (name, surname, patronymic, login, password))
     db.commit()
     db.close()
 
@@ -84,11 +85,12 @@ def Show_client():  # вывод всех клиентов
     db.close()
 
 
-def incert_personal(FULL_NAME):
+def incert_personal(name, surname, patronymic, login, password):
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute('''INSERT INTO Personal (Full_Name)
-                    VALUES (?) ''', (FULL_NAME,))
+    cursor.execute('''INSERT INTO Personal (Name, Surname, Patronymic, Login, Password)
+                      VALUES (?, ?, ?, ?, ?)''',
+                   (name, surname, patronymic, login, password))
     db.commit()
     db.close()
 
