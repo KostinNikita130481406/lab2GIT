@@ -46,7 +46,7 @@ def init_db():
 
     #Таблица заявок
     cursor.execute('''CREATE TABLE IF NOT EXISTS Application (
-                        ID_Application INTEGER PRIMARY KEY AUTOINCREMENT,у
+                        ID_Application INTEGER PRIMARY KEY AUTOINCREMENT,
                         Data_income TEXT NOT NULL,
                         Type_electronics TEXT NOT NULL,
                         Brand_name TEXT NOT NULL,
@@ -125,7 +125,7 @@ def Show_application():
     db.close()
 
 #############################################
-def Redistration_User():
+#def Redistration_User():
 
 
 
