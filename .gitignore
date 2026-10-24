@@ -1,2 +1,13 @@
 # created by virtualenv automatically
-
+.venv/
+venv/
+Lib/
+Scripts/
+Include/
+pyvenv.cfg
+CACHEDIR.TAG
+.idea/
+__pycache__/
+*.pyc
+service
+service1
