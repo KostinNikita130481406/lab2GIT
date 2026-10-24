@@ -166,21 +166,18 @@ def Redistration_User(user):
 
 
 #############################################
-def Find_login_Password(login,password = None):
-    user_Client = Find_Client(login, password)
-    if user_Client == None:
-        user_Personal = Find_Personal(login, password)
-    if user_Personal == None:
-        user_admin = Find_Admin(login, password)
-    if user_admin == None:
+def Find_login_Password(login, password = None):
+    user_Client = Find_Client(login, password = None)
+    user_Personal = Find_Personal(login, password = None)
+    user_admin = Find_Admin(login, password = None)
+
+    if user_Client is None and user_Personal is None and user_admin is None:
         return None
-
-    users = []
-    users.append(user_Client)
-    users.append(user_Personal)
-    users.append(user_admin)
-
-    return users
+    Role = []
+    Role.append(user_Client)
+    Role.append(user_Personal)
+    Role.append(user_admin)
+    return Role
 
 # Поиск логина по таблицам данных
 def Find_Client(login,password = None):
