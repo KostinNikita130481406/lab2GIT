@@ -81,7 +81,6 @@ def Show_client():  # вывод всех клиентов
     rows = cursor.fetchall()
     for row in rows:
         print(*row)
-    print("")
     db.close()
 
 
@@ -101,7 +100,7 @@ def Show_personal():
     cursor.execute('''SELECT * FROM Personal''')
     rows = cursor.fetchall()
     for row in rows:
-        print(row)
+        print(*row)
     db.close()
 
 
@@ -122,7 +121,7 @@ def Show_Admin():
     cursor.execute('''SELECT * FROM Admin''')
     rows = cursor.fetchall()
     for row in rows:
-        print(row)
+        print(*row)
     db.close()
 
 def incert_application(Data_income, Type_electronics, Brand_name, Comment_problem, Kod_client):
@@ -143,7 +142,7 @@ def Show_application():
 
     rows = cursor.fetchall()
     for row in rows:
-        print(row)
+        print(f"Заявка №{row[0]}: ...")
     db.close()
 
 #############################################
@@ -153,23 +152,24 @@ def Redistration_User(user):
     while(True):
         rezult = Find_login_Password(Login)
         if rezult == None:
-            #incert_client(user.name, user.surname, user.patronymic, Login, user.password)
-            incert_personal(user.name, user.surname, user.name, Login, user.password)
+            incert_client(user.name, user.surname, user.patronymic, Login, user.password)
+            #incert_personal(user.name, user.surname, user.name, Login, user.password)
             #incert_Admin(user.name, user.surname, user.name, Login, user.password)
             break
         else:
             print("Такой логин уже существует. Придумайте новый логин ")
             Login = input()
+            user_id = input()
 
 
 
 
 
-#############################################
+###########################################################
 def Find_login_Password(login, password = None):
-    user_Client = Find_Client(login, password = None)
-    user_Personal = Find_Personal(login, password = None)
-    user_admin = Find_Admin(login, password = None)
+    user_Client = Find_Client(login, password)
+    user_Personal = Find_Personal(login, password)
+    user_admin = Find_Admin(login, password)
 
     if user_Client is None and user_Personal is None and user_admin is None:
         return None
@@ -232,3 +232,22 @@ def Find_Admin(login,password = None):
     else:
         return None
 
+
+
+def Show_application_client(Kod_client):
+    db = get_connection()
+    cursor = db.cursor()
+    cursor.execute('''SELECT ID_Application, Data_income, Type_electronics, Brand_name, Comment_problem, Data_close
+                    FROM Application
+                    WHERE Kod_client = ?
+                    ORDER BY Data_income ASC''', (Kod_client,))
+    rows = cursor.fetchall()
+
+
+    for row in rows:
+        Data_close = row[5]
+        if Data_close == None:
+            status = "В работе"
+        else:
+            status = f"закрыта {Data_close}"
+        print(f"Заявка №{row[0]} от {row[1]}: {row[2]}, {row[3]}, проблема: {row[4]}. Статус: {status}")

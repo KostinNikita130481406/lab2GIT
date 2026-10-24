@@ -1,81 +1,65 @@
-import data_base
-from dataclasses import dataclass
+import menu
+from services import AuthService, ServiceError, ROLE_CLIENT, ROLE_PERSONAL, ROLE_ADMIN
 
-@dataclass
-class User:
-    User_id: int
-    loginn: str
-    password: str
-    name: str
-    surname: str
-    patronymic: str
+
+def open_menu(user_id, role):
+    # Какое меню открыть, решает роль пользователя
+    match role:
+        case "Клиент":
+            menu.menu_client(user_id)
+        case "Сотрудник":
+            menu.menu_master(user_id)
+        case "Админ":
+            menu.menu_admin(user_id)
+
+
+def login(auth):
+    # Возвращает (id, роль) или None, если вход не удался
+    login_text = input("Введите логин: ")
+    password = input("Введите пароль: ")
+    try:
+        user_id, role = auth.login(login_text, password)
+    except ServiceError as error:
+        print(error)
+        return None
+    print("Успешный вход!")
+    return user_id, role
+
+
+def registration(auth):
+    # Возвращает True, если регистрация прошла
+    print("Регистрация клиента")
+    name = input("Введите имя: ")
+    surname = input("Введите фамилию: ")
+    patronymic = input("Введите отчество (можно пропустить): ")
+    login_text = input("Введите логин: ")
+    password = input("Введите пароль: ")
+    try:
+        auth.register_client(name, surname, patronymic, login_text, password)
+    except ServiceError as error:
+        print(error)
+        return False
+    print("Регистрация прошла успешно. Войдите в систему.")
+    return True
+
 
 def registration_login():
-    print("1 - Войти в систему\n 2 - Зарегистрироваться в системе\n ")
-    chosee = int(input('Выберете пункт меню'))
-    match chosee:
-        case 1:
-            login()
-            print(Role)
-            #функция вызова основного меню клиента
-        case 2:
-            Registration()
-
-
-
-
-def login():
-    global Role
+    auth = AuthService()
     while True:
-        Loginn = input("Введите логин: ")
-        password = input("Введите пароль: ")
-        clean_login = Loginn.strip()
-        clean_password = password.strip()
-        if clean_login and clean_password:
-            users = data_base.Find_login_Password(clean_login, clean_password)
-            if users != None:
-                #Проверка роли пользователя
-                print(users)
-                if users[0] != None:
-                    Role = "Клиент"
-                elif users[1] != None:
-                    Role = "Сотрудник"
-                else:
-                    Role = "Админ"
+        print("\n1 - Войти в систему\n2 - Зарегистрироваться в системе\n0 - Выйти из программы")
+        choice = input("Выберите пункт меню: ").strip()
+        match choice:
+            case "1":
+                result = login(auth)
+                if result:
+                    open_menu(*result)
+            case "2":
+                if registration(auth):
+                    result = login(auth)
+                    if result:
+                        open_menu(*result)
+            case "0":
+                print("Программа закрыта")
                 break
-            else:
-                print("Логин или пароль не верен!")
-                continue
-        else:
-            print("Повторите ввод логина и пароля: ")
-            continue
-    print("Успешный вход! ")
-
-def Registration():
-    while True:
-        Name = input("Введите имя: ")
-        Surname = input("Введите фамилию: ")
-        Patronimic = input("Введите отчество")
-        Loginn = input("Введите логин: ")
-        password = input("Введите пароль: ")
-        clean_Name = Name.strip()
-        clean_Surname = Surname.strip()
-        clean_Patronimic = Patronimic.strip()
-        clean_login = Loginn.strip()
-        clean_password = password.strip()
-        if clean_login and clean_password and clean_Name and clean_Surname and clean_Patronimic:
-            user = User(
-                User_id = 0,
-                name = clean_Name,
-                surname = clean_Surname,
-                patronymic = clean_Patronimic,
-                loginn = clean_login,
-                password = clean_password
-            )
-            data_base.Redistration_User(user)
-            break
-        else:
-            print("Повторите ввод данных: ")
-            continue
-    print("Регистрация прошла успешно\n Войдите в систему:")
-    login()
+            case _:
+                print("Нет такого пункта меню")
