@@ -1,9 +1,11 @@
 import data_base
+import RegistrationLogin
 
 # /////////////////////////////////////////////////////////////////////////////////////////////
 print("Начало программы")
 data_base.init_db()
-while (True):
+RegistrationLogin.registration_login()
+'''while (True):
     print(" 1 - Завести клиента\n 2 - Завести сотрудника\n 3 - Завести заявку на ремонт\n 4 - Выйти из программы\n")
     choicee = int(input("Выберете вариант меню "))
     match choicee:
@@ -37,6 +39,6 @@ while (True):
             print("Программа закрыта ")
             break
 
-
+'''
 
 

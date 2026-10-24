@@ -16,6 +16,8 @@ def registration_login():
     match chosee:
         case 1:
             login()
+            print(Role)
+            #функция вызова основного меню клиента
         case 2:
             Registration()
 
@@ -23,18 +25,31 @@ def registration_login():
 
 
 def login():
+    global Role
     while True:
         Loginn = input("Введите логин: ")
         password = input("Введите пароль: ")
         clean_login = Loginn.strip()
         clean_password = password.strip()
         if clean_login and clean_password:
-            data_base.Find_login_Password(clean_login, clean_password)
-            break
+            users = data_base.Find_login_Password(clean_login, clean_password)
+            if users != None:
+                #Проверка роли пользователя
+                print(users)
+                if users[0] != None:
+                    Role = "Клиент"
+                elif users[1] != None:
+                    Role = "Сотрудник"
+                else:
+                    Role = "Админ"
+                break
+            else:
+                print("Логин или пароль не верен!")
+                continue
         else:
             print("Повторите ввод логина и пароля: ")
             continue
-
+    print("Успешный вход! ")
 
 def Registration():
     while True:
@@ -62,3 +77,5 @@ def Registration():
         else:
             print("Повторите ввод данных: ")
             continue
+    print("Регистрация прошла успешно\n Войдите в систему:")
+    login()

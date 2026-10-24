@@ -12,7 +12,7 @@ class User:
     patronymic: str
 
 def get_connection():  # Получение конекшина к БД
-    return sqlite3.connect('service')
+    return sqlite3.connect('service1')
 
 
 def init_db():
@@ -105,6 +105,26 @@ def Show_personal():
     db.close()
 
 
+
+def incert_Admin(name, surname, patronymic, login, password):
+    db = get_connection()
+    cursor = db.cursor()
+    cursor.execute('''INSERT INTO Admin (Name, Surname, Patronymic, Login, Password)
+                      VALUES (?, ?, ?, ?, ?)''',
+                   (name, surname, patronymic, login, password))
+    db.commit()
+    db.close()
+
+
+def Show_Admin():
+    db = get_connection()
+    cursor = db.cursor()
+    cursor.execute('''SELECT * FROM Admin''')
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+    db.close()
+
 def incert_application(Data_income, Type_electronics, Brand_name, Comment_problem, Kod_client):
     db = get_connection()
     cursor = db.cursor()
@@ -127,32 +147,52 @@ def Show_application():
     db.close()
 
 #############################################
-#def Redistration_User():
+def Redistration_User(user):
+    Login = user.loginn
+
+    while(True):
+        rezult = Find_login_Password(Login)
+        if rezult == None:
+            #incert_client(user.name, user.surname, user.patronymic, Login, user.password)
+            incert_personal(user.name, user.surname, user.name, Login, user.password)
+            #incert_Admin(user.name, user.surname, user.name, Login, user.password)
+            break
+        else:
+            print("Такой логин уже существует. Придумайте новый логин ")
+            Login = input()
 
 
 
 
 
 #############################################
-def Find_login_Password(login,password):
-    User = Find_Client(login,password)
-    if User == None:
-        User = Find_Personal(login,password)
-    else:
-        return User
+def Find_login_Password(login,password = None):
+    user_Client = Find_Client(login, password)
+    if user_Client == None:
+        user_Personal = Find_Personal(login, password)
+    if user_Personal == None:
+        user_admin = Find_Admin(login, password)
+    if user_admin == None:
+        return None
 
+    users = []
+    users.append(user_Client)
+    users.append(user_Personal)
+    users.append(user_admin)
 
-        #if User == None:
-         #   User = Find_Admin(login,password)
-         #   if User == None:
-        #        return False
+    return users
 
-def Find_Client(login,password):
+# Поиск логина по таблицам данных
+def Find_Client(login,password = None):
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute('''SELECT * FROM Client 
-                    WHERE Login = ? 
-                    AND Password = ?''', (login, password))
+    if password != None:
+        cursor.execute('''SELECT * FROM Client 
+            WHERE Login = ? 
+            AND Password = ?''', (login, password))
+    else :
+        cursor.execute('''SELECT * FROM Client 
+        WHERE Login = ? ''', (login,))
 
     User = cursor.fetchone()
     if User:
@@ -161,17 +201,37 @@ def Find_Client(login,password):
     else:
         return None
 
-def Find_Personal(login,password):
+def Find_Personal(login,password = None):
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute('''SELECT * FROM Personal 
-                    WHERE Login = ? 
-                    AND Password = ?''', (login, password))
+    if password != None:
+        cursor.execute('''SELECT * FROM Personal 
+             WHERE Login = ? 
+             AND Password = ?''', (login, password))
+    else:
+        cursor.execute('''SELECT * FROM Personal 
+                     WHERE Login = ? ''', (login,))
+    User = cursor.fetchone()
+    if User:
+        user = User[0]
+        return user
+    else:
+        return None
 
-def Find_Admin(login,password):
+def Find_Admin(login,password = None):
     db = get_connection()
     cursor = db.cursor()
-    cursor.execute('''SELECT * FROM Admin 
-                    WHERE Login = ? 
-                    AND Password = ?''', (login, password))
+    if password != None:
+        cursor.execute('''SELECT * FROM Admin 
+             WHERE Login = ? 
+             AND Password = ?''', (login, password))
+    else:
+        cursor.execute('''SELECT * FROM Client 
+         WHERE Login = ? ''', (login,))
+    User = cursor.fetchone()
+    if User:
+        user = User[0]
+        return user
+    else:
+        return None
 
