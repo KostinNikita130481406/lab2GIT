@@ -159,7 +159,7 @@ def Redistration_User(user):
         else:
             print("Такой логин уже существует. Придумайте новый логин ")
             Login = input()
-            user_id = input()
+
 
 
 
