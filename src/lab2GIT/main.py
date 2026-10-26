@@ -1,7 +1,7 @@
-import data_base
+from database.database import init_db
 import RegistrationLogin
 
 # /////////////////////////////////////////////////////////////////////////////////////////////
 print("Начало программы")
-data_base.init_db()
+init_db()
 RegistrationLogin.registration_login()

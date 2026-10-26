@@ -1,5 +1,6 @@
 import menu
-from services import AuthService, ServiceError, ROLE_CLIENT, ROLE_PERSONAL, ROLE_ADMIN
+from services import ServiceError
+from services.auth_service import login as auth_login, register_client
 
 
 def open_menu(user_id, role):
@@ -13,12 +14,12 @@ def open_menu(user_id, role):
             menu.menu_admin(user_id)
 
 
-def login(auth):
+def login():
     # Возвращает (id, роль) или None, если вход не удался
     login_text = input("Введите логин: ")
     password = input("Введите пароль: ")
     try:
-        user_id, role = auth.login(login_text, password)
+        user_id, role = auth_login(login_text, password)
     except ServiceError as error:
         print(error)
         return None
@@ -26,7 +27,7 @@ def login(auth):
     return user_id, role
 
 
-def registration(auth):
+def registration():
     # Возвращает True, если регистрация прошла
     print("Регистрация клиента")
     name = input("Введите имя: ")
@@ -35,7 +36,7 @@ def registration(auth):
     login_text = input("Введите логин: ")
     password = input("Введите пароль: ")
     try:
-        auth.register_client(name, surname, patronymic, login_text, password)
+        register_client(name, surname, patronymic, login_text, password)
     except ServiceError as error:
         print(error)
         return False
@@ -44,18 +45,17 @@ def registration(auth):
 
 
 def registration_login():
-    auth = AuthService()
     while True:
         print("\n1 - Войти в систему\n2 - Зарегистрироваться в системе\n0 - Выйти из программы")
         choice = input("Выберите пункт меню: ").strip()
         match choice:
             case "1":
-                result = login(auth)
+                result = login()
                 if result:
                     open_menu(*result)
             case "2":
-                if registration(auth):
-                    result = login(auth)
+                if registration():
+                    result = login()
                     if result:
                         open_menu(*result)
             case "0":
