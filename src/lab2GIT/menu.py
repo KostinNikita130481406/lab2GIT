@@ -1,7 +1,7 @@
 from services import ApplicationService, StaffService, ServiceError
 
 
-def ask_number(prompt):
+def ask_number(prompt): # Защита от неверного ввода данных
     while True:
         try:
             return int(input(prompt))
@@ -10,20 +10,29 @@ def ask_number(prompt):
 
 
 def show_application(application):
-    status = "В работе" if application.Data_close is None else f"закрыта {application.Data_close}"
+    # определяем статус заявки
+    if application.Data_close is None:
+        status = "В работе"
+    else:
+        status = f"закрыта {application.Data_close}"
+
+    # определяем исполнителя
     if application.Kod_Personal is None:
         executor = "не назначен"
     else:
         executor = f"сотрудник №{application.Kod_Personal}"
-    print(f"Заявка №{application.ID_Application} от {application.Data_income}: "
-          f"{application.Type_electronics}, {application.Brand_name}, "
-          f"проблема: {application.Comment_problem}. "
-          f"Клиент №{application.Kod_client}, исполнитель: {executor}. Статус: {status}")
+
+    print("Заявка №", application.ID_Application, "от", application.Data_income)
+    print("Техника:", application.Type_electronics, application.Brand_name)
+    print("Проблема:", application.Comment_problem)
+    print("Клиент №", application.Kod_client, " Исполнитель:", executor)
+    print("Статус:", status)
+    print()
 
 
-def show_list(applications, empty_text="Заявок нет"):
+def show_list(applications, not_text="Заявок нет"): # вывод списка заявок
     if not applications:
-        print(empty_text)
+        print(not_text)
         return
     for application in applications:
         show_application(application)
