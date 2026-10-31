@@ -24,6 +24,8 @@ def get_by_id(id_application):  # поиск заявки по номеру
         return None
     return Application(*row)
 
+def get_ALL_by_unload():
+    pass
 
 def get_all():  # все заявки
     db = get_connection()

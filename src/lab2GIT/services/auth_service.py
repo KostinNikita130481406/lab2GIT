@@ -49,3 +49,13 @@ def register_client(name, surname, patronymic, login_text, password):
     if login_exists(login_text):
         raise ServiceError("Такой логин уже существует. Придумайте другой")
     client_repository.add(name, surname, patronymic, login_text, password)
+
+def register_admin(name, surname, patronymic, login_text, password):
+    name = _require(name, "Имя")
+    surname = _require(surname, "Фамилия")
+    patronymic = (patronymic or "").strip() or None  # отчество необязательно
+    login_text = _require(login_text, "Логин")
+    password = _require(password, "Пароль")
+    if login_exists(login_text):
+        raise ServiceError("Такой логин уже существует. Придумайте другой")
+    admin_repository.add(name, surname, patronymic, login_text, password)

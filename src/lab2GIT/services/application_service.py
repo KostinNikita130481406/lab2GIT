@@ -11,8 +11,8 @@ def _choose_personal():
     staff = personal_repository.get_all()
     if not staff:
         return None
-    best = min(staff, key=lambda p: (
-        application_repository.count_open_by_personal(p.Kod_Personal), p.Kod_Personal))
+    best = min(staff, key=lambda p:
+        (application_repository.count_open_by_personal(p.Kod_Personal), p.Kod_Personal))
     return best.Kod_Personal
 
 
