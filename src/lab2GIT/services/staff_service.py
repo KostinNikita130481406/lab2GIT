@@ -1,6 +1,7 @@
 from services import ServiceError
 from services.auth_service import _require, login_exists
 from repositories import personal_repository, application_repository
+from services import security
 
 
 def get_all():
@@ -15,7 +16,7 @@ def add_personal(name, surname, patronymic, login_text, password):
     password = _require(password, "Пароль")
     if login_exists(login_text):
         raise ServiceError("Такой логин уже существует")
-    personal_repository.add(name, surname, patronymic, login_text, password)
+    personal_repository.add(name, surname, patronymic, login_text, security.hash_password(password))
 
 
 def delete_personal(kod_personal):
