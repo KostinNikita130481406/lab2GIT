@@ -1,5 +1,6 @@
 from services import ServiceError
 from repositories import client_repository, personal_repository, admin_repository
+from services import security
 
 ROLE_CLIENT = "Клиент"
 ROLE_PERSONAL = "Сотрудник"
@@ -34,7 +35,7 @@ def login(login_text, password):
     for repo, role, id_field in variants:
         for user in repo.get_all():
             # str(): столбцы объявлены как STRING, и SQLite хранит "123" числом
-            if str(user.Login) == login_text and str(user.Password) == password:
+            if str(user.Login) == login_text and security.verify_password(password, str(user.Password)):
                 return getattr(user, id_field), role
     raise ServiceError("Логин или пароль не верен!")
 
